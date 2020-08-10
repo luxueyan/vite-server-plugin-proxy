@@ -1,10 +1,9 @@
-# vite-transform-globby-import ⚡
+# vite-server-plugin-proxy ⚡
 
 [![npm][npm-img]][npm-url]
 [![node][node-img]][node-url]
 
-This transform is an simple resolution for enchancement of 'import statement'. It just replace the globby 'import statement' with multiple import lines before the default transforms.
-
+This plugin support router config like [http-proxy-middleware](https://github.com/chimurai/http-proxy-middleware/)
 
 ## Status
 
@@ -14,42 +13,35 @@ In rc.1 and will likely release 1.0 soon.
 
 ### Install (yarn or npm)
 
-`yarn add vite-transform-globby-import` or `npm i vite-transform-globby-import`
+`yarn add vite-server-plugin-proxy` or `npm i vite-server-plugin-proxy`
 
 ### Usage
 
-```javascript
-// vite.config.js
-const sharedConfig = {
-  alias: {
-    '/@/': path.resolve(__dirname, 'src'),
-  },
-}
-module.exports = {
-  ...sharedConfig,
-  transforms: [require('vite-transform-globby-import')(sharedConfig)],
-}
-```
-
 Example:
-```ts
-import routes from '../pages/**/route.ts'
-import imgs from '/@/assets/image/**/*.@(jpg|png)'
-// These will be replaced to:
-/* 
- * import * as routes0 from '/@/pages/route.ts'
- * import * as routes1 from '/@/pages/demo/route.ts'
- * ...
- * const routes = { routes0, routes1, ... }
- * import * as imgs0 from '/@/assets/image/demo.jpg'
- * import * as imgs1 from '/@/assets/image/demo/demo.png'
- * ...
- * const imgs = { imgs0, imgs1, ... }
- */
+
+```js
+// vite.config.js
+const defaultProxy = 'http://localhost:3000'
+module.exports = {
+  proxies: {
+    '/api': {
+      target: defaultProxy,
+      proxyTimeout: 1500000,
+      timeout: 1500000,
+      changeOrigin: true,
+      router: function (req) {
+        if (req.query._proxy) {
+          const proxyTarget = req.query._proxy
+          return proxyTarget
+        }
+
+        console.log(req.path, `: proxy to ${defaultProxy}`)
+        return defaultProxy
+      },
+    }
+  }
+}
 ```
-
-**Note:** Only work in files includes `.vue,.js,.jsx,.ts,.tsx`. 
-
 
 ## License
 
@@ -59,6 +51,7 @@ MIT
 [npm-url]: https://npmjs.com/package/vite-transform-globby-import
 [node-img]: https://img.shields.io/node/v/vite.svg
 [node-url]: https://nodejs.org/en/about/releases/
+
 <!-- [unix-ci-img]: https://circleci.com/gh/vitejs/vite.svg?style=shield
 [unix-ci-url]: https://app.circleci.com/pipelines/github/vitejs/vite
 [windows-ci-img]: https://ci.appveyor.com/api/projects/status/0q4j8062olbcs71l/branch/master?svg=true

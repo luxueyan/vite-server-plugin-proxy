@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## 1.0.0-rc.1 (2020-08-10)
+
+
+### Features
+
+* First commit for base feature ([f0fb1a9](https://github.com/luxueyan/vite-transform-globby-import/commit/f0fb1a96a5ffa2d4afc2f9b6a866eb6ba38e0912))
+
 ## [1.0.0-rc.4](https://github.com/luxueyan/vite-transform-globby-import/compare/v1.0.0-rc.3...v1.0.0-rc.4) (2020-08-05)
 
 
